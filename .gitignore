@@ -1,0 +1,5 @@
+.vs
+.git
+network_wpf/bin
+network_wpf/obj
+network_wpf/network_wpf.csproj.user
