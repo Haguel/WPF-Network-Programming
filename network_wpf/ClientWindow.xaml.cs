@@ -27,10 +27,13 @@ namespace network_wpf
     {
         private Random random = new();
         private IPEndPoint? endPoint;
+        private DateTime lastSyncMoment;
+        private bool isServerOn;
 
         public ClientWindow()
         {
             InitializeComponent();
+            lastSyncMoment = default;
         }
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
@@ -49,7 +52,11 @@ namespace network_wpf
                     new ClientRequest
                     {
                         Command = "Message",
-                        Data = LoginTextBox.Text + ": " + MessageTextBox.Text
+                        Message = new()
+                        {
+                            Login = LoginTextBox.Text,
+                            Text = LoginTextBox.Text + ": " + MessageTextBox.Text
+                        } 
                     }
                     );
             }
@@ -62,7 +69,9 @@ namespace network_wpf
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             LoginTextBox.Text = "User" + random.Next(100);
-            MessageTextBox.Text = "Hello World!";    
+            MessageTextBox.Text = "Hello World!";
+            isServerOn = true;
+            Sync();
         }
 
         private void SendMessage(Object? arg)
@@ -83,6 +92,7 @@ namespace network_wpf
             try
             {
                 socket.Connect(endPoint);
+                isServerOn = true;
                 socket.Send(
                     Encoding.UTF8.GetBytes(JsonSerializer.Serialize(clientRequest))
                     );
@@ -109,11 +119,28 @@ namespace network_wpf
                 if (response == null)
                 {
                     str = "JSON Error in " + str;
+
                     Dispatcher.Invoke(() => ClientLog.Background = new SolidColorBrush(Colors.Pink));
                 }
                 else
                 {
-                    str = response.Status;
+                    str = "";
+
+                    if (response.Messages != null)
+                    {
+                        foreach (var message in response.Messages)
+                        {
+                            // hw 10.10
+                            str += DateTime.Now.ToString() + "   " + message + "\n";
+
+                            if (message.Moment > lastSyncMoment)
+                            {
+                                lastSyncMoment = message.Moment;
+                            }
+                        }
+
+                    }
+
                     Dispatcher.Invoke(() => ClientLog.Background = new SolidColorBrush(Colors.Green));
                 }
 
@@ -124,8 +151,49 @@ namespace network_wpf
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                if (isServerOn)
+                {
+                    isServerOn = false;
+                    socket.Dispose();
+                    MessageBox.Show(ex.Message);
+                    isServerOn = true;
+                }
             }
+        }
+
+        private async Task Sync()
+        {
+            if (isServerOn)
+            {
+                String[] address = HostTextBox.Text.Split(":");
+
+                try
+                {
+                    endPoint = new
+                        (
+                            IPAddress.Parse(address[0]),
+                            Convert.ToInt32(address[1])
+                        );
+
+                    new Thread(SendMessage).Start(
+                        new ClientRequest
+                        {
+                            Command = "Check",
+                            Message = new()
+                            {
+                                Moment = lastSyncMoment
+                            }
+                        }
+                    );
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+            await Task.Delay(1000);
+            Sync();
         }
     }
 }

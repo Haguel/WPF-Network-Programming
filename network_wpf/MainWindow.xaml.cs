@@ -34,5 +34,10 @@ namespace network_wpf
         {
             new ClientWindow().Show();
         }
+
+        private void EmailButton_Click(object sender, RoutedEventArgs e)
+        {
+            new EmailWindow().ShowDialog();
+        }
     }
 }

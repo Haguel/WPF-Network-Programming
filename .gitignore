@@ -3,3 +3,6 @@
 network_wpf/bin
 network_wpf/obj
 network_wpf/network_wpf.csproj.user
+network_wpf/email-settings.json
+network_wpf/Database1.mdf
+network_wpf/Database1_log.ldf

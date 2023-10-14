@@ -22,10 +22,12 @@ namespace network_wpf
     {
         private Socket? listenSocket;
         private IPEndPoint? endPoint;
+        private LinkedList<ChatMessage> messages;
 
         public ServerWindow()
         {
             InitializeComponent();
+            messages = new();
         }
 
         private void SwitchServer_Click(object sender, RoutedEventArgs e)
@@ -94,20 +96,35 @@ namespace network_wpf
                     ServerResponse serverResponse = new();
                     var clientRequest = JsonSerializer.Deserialize<ClientRequest>(str);
 
+                    bool needLog = true;
                     if (clientRequest == null)
                     {
                         str = "Erorr json " + str;
                         serverResponse.Status = "400 Bad Request";
-                        serverResponse.Data = "Error decoding JSON";
+                        //serverResponse.Data = "Error decoding JSON";
                     }
                     else
                     {
-                        str = clientRequest.Data;
-                        serverResponse.Status = "200 OK";
-                        serverResponse.Data = "Received " + DateTime.Now;
+                        if (clientRequest.Command.Equals("Message"))
+                        {
+                            clientRequest.Message.Moment = DateTime.Now;
+                            messages.AddLast(clientRequest.Message);
+
+                            str = clientRequest.Message.ToString();
+                            serverResponse.Status = "200 OK";
+                        } 
+                        else if (clientRequest.Command.Equals("Check"))
+                        {
+                            serverResponse.Status = "200 OK";
+                            serverResponse.Messages = messages.Where(m => m.Moment > clientRequest.Message.Moment);
+                            needLog = false;
+                        }
                     }
 
-                    Dispatcher.Invoke(() => ServerLog.Text += $"{DateTime.Now} {str}!\n");
+                    if (needLog)
+                    {
+                        Dispatcher.Invoke(() => ServerLog.Text += $"{DateTime.Now} {str}!\n");
+                    }
 
                     String response = "Received " + DateTime.Now;
 
