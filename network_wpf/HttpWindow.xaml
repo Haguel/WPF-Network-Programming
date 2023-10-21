@@ -1,0 +1,22 @@
+﻿<Window x:Class="network_wpf.HttpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:network_wpf"
+        mc:Ignorable="d"
+        Title="HttpWindow" Height="450" Width="800">
+    <StackPanel Orientation="Vertical">
+        <Button x:Name="get1Button"
+            Content="GET" Click="get1Button_Click"/>
+        <Button x:Name="ratesButton"
+            Content="Rates" Click="ratesButton_Click"/>
+        <Button x:Name="popularButton"
+            Content="Eur Usd Xau" Click="popularButton_Click"/>
+        <Button x:Name="nbuJson"
+            Content="Nbu json" Click="nbuJson_Click"/>
+        <Button x:Name="nbuXaml"
+            Content="Nbu Xaml" Click="nbuXaml_Click"/>
+        <TextBlock x:Name="textBlock1" FontFamily="Courier New"/>
+    </StackPanel>
+</Window>

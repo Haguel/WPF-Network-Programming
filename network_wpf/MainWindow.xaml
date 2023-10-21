@@ -29,5 +29,20 @@
                 Content="Email"
                 Margin="10 5"
                 Padding="0 4 0 7"/>
+        <Button x:Name="ConfirmButton"
+                    Click="ConfirmButton_Click"
+                Content="Confirm"
+                Margin="10 5"
+                Padding="0 4 0 7"/>
+        <Button x:Name="Http"
+                    Click="Http_Click"
+                Content="Http"
+                Margin="10 5"
+                Padding="0 4 0 7"/>
+        <Button x:Name="Crypto"
+                    Click="Crypto_Click"
+                Content="Crypto"
+                Margin="10 5"
+                Padding="0 4 0 7"/>
     </StackPanel>
 </Window>

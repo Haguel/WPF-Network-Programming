@@ -39,5 +39,20 @@ namespace network_wpf
         {
             new EmailWindow().ShowDialog();
         }
+
+        private void ConfirmButton_Click(object sender, RoutedEventArgs e)
+        {
+            new AuthWindow().ShowDialog();
+        }
+
+        private void Http_Click(object sender, RoutedEventArgs e)
+        {
+            new HttpWindow().ShowDialog();
+        }
+
+        private void Crypto_Click(object sender, RoutedEventArgs e)
+        {
+            new CryptoWindow().ShowDialog();
+        }
     }
 }
