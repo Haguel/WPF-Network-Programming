@@ -22,7 +22,7 @@
            HorizontalContentAlignment="Center"
            Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
 
-        <ListView ItemsSource="{Binding CoinsData}" Grid.Row="1" Grid.Column="0" x:Name="itemsListView" Tag="{Binding Path=id}">
+        <ListView ItemsSource="{Binding CoinsData}" Grid.Row="1" Grid.Column="0" x:Name="itemsListView">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Label Content="{Binding Path=name}"/>
@@ -36,7 +36,7 @@
             </ListView.Resources>
         </ListView>
 
-        <Canvas Grid.Row="1" Grid.Column="1"/>
+        <Canvas Grid.Row="1" Grid.Column="1" x:Name="Graph"/>
 
     </Grid>
 </Window>

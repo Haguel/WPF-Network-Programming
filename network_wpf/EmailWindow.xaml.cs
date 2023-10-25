@@ -26,8 +26,6 @@ namespace network_wpf
         public EmailWindow()
         {
             InitializeComponent();
-
-            
         }
 
         private SmtpClient GetSmtpClient()
@@ -97,9 +95,7 @@ namespace network_wpf
             {
                 EnableSsl = ssl,
                 Credentials = new NetworkCredential(email, password)
-            };
-
-            
+            };      
         }
 
         private void SendButton1_Click(object sender, RoutedEventArgs e)
